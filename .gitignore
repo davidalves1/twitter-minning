@@ -1,0 +1,8 @@
+.idea/
+lib/
+include/
+bin/
+*.json
+*.pyc
+.Python
+congig.py
