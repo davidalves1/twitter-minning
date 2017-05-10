@@ -3,7 +3,6 @@
 
 # Inspirado em https://marcobonzanini.com/2015/03/02/mining-twitter-data-with-python-part-1/
 
-import codecs
 import config
 import json
 import tweepy
@@ -17,22 +16,20 @@ auth.set_access_token(config.access_token, config.access_secret)
 api = tweepy.API(auth)
  
 class TwitterListener(StreamListener):
- 
     def on_data(self, data):
         _data = json.loads(data)
-        print(type(_data['text']))
-        print(_data['text'].decode('ascii').encode('utf8'))
         try:
-            # with open('data.json', 'a') as f:
-            #     f.write(json.dumps({
-            #         'text': _data['text'],
-            #         'user': {
-            #             'name': _data['user']['name'],
-            #             'location': _data['user']['location'],
-            #             'url': _data['user']['url'],
-            #             'profile_image_url': _data['user']['profile_image_url']
-            #         }
-            #     }) + "\n")
+            # Os dados são armazenados no arquivo `data.json`
+            with open('data.json', 'a') as f:
+                f.write(json.dumps({
+                    'text': _data['text'],
+                    'user': {
+                        'name': _data['user']['name'],
+                        'location': _data['user']['location'],
+                        'url': _data['user']['url'],
+                        'profile_image_url': _data['user']['profile_image_url']
+                    }
+                }) + "\n")
             print('Novo registro')
             return True
         except BaseException as e:
