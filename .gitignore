@@ -2,7 +2,8 @@
 lib/
 include/
 bin/
+libs-twitter-minning/
 *.json
 *.pyc
 .Python
-congig.py
+config.py

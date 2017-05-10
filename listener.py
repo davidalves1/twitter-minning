@@ -18,19 +18,30 @@ api = tweepy.API(auth)
 class TwitterListener(StreamListener):
     def on_data(self, data):
         _data = json.loads(data)
+        _user_data = {
+            'text': _data['text'],
+            'user': {
+                'name': _data['user']['name'],
+                'location': _data['user']['location'],
+                'url': _data['user']['url'],
+                'profile_image_url': _data['user']['profile_image_url']
+            }
+        }
+
         try:
             # Os dados são armazenados no arquivo `data.json`
             with open('data.json', 'a') as f:
-                f.write(json.dumps({
-                    'text': _data['text'],
-                    'user': {
-                        'name': _data['user']['name'],
-                        'location': _data['user']['location'],
-                        'url': _data['user']['url'],
-                        'profile_image_url': _data['user']['profile_image_url']
-                    }
-                }) + "\n")
-            print('Novo registro')
+                f.write(data + ",")
+
+            if '#moroorgulhobrasileiro' in _data['text'].lower():
+                m = open('moro.json', 'a')
+                m.write(json.dumps(_user_data) + "\n")
+
+            if '#brasilcomlula' in _data['text'].lower():
+                l = open('lula.json', 'a')
+                l.write(json.dumps(_user_data) + "\n")
+
+            print('Novo registro adicionado')
             return True
         except BaseException as e:
             print('Error on_data: %s' % str(e))
@@ -42,4 +53,4 @@ class TwitterListener(StreamListener):
         return True
 if __name__ == '__main__':
     twitter_stream = Stream(auth, TwitterListener())
-    twitter_stream.filter(track=['#MusicaBoaAoVivo'])
+    twitter_stream.filter(track=['#MoroOrgulhoBrasileiro', '#BrasilComLula'])
